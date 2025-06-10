@@ -1,27 +1,22 @@
 import { lazy } from 'react';
-import RoleProtectedRoute from './RoleProtectedRoute';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
-const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
-const StaffDashboard = Loadable(lazy(() => import('pages/staff/index')));
+import AuthGuard from 'utils/route-guard/AuthGuard';
 
-const StaffRoutes = {
+const StaffDashboard = Loadable(lazy(() => import('pages/staff/dashboard')));
+const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
+
+const staffRoutes = {
   path: '/staff',
-  element: <DashboardLayout />,
+  element: (
+    <AuthGuard role="staff">
+      <DashboardLayout />
+    </AuthGuard>
+  ),
   children: [
-    {
-      path: 'dashboard',
-      element: (
-        <RoleProtectedRoute allowedRoles={['staff']}>
-          <StaffDashboard />
-        </RoleProtectedRoute>
-      )
-    },
-    {
-      path: '*',
-      element: <MaintenanceError />
-    }
+    { path: 'dashboard', element: <StaffDashboard /> },
+    { path: '*', element: <MaintenanceError /> }
   ]
 };
 
-export default StaffRoutes;
+export default staffRoutes;

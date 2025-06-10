@@ -1,24 +1,24 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-// project import
-import { APP_DEFAULT_PATH } from 'config';
+import { Navigate, useLocation } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 
-// ==============================|| GUEST GUARD ||============================== //
-
 export default function GuestGuard({ children }) {
-  const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
+  const { isLoggedIn, user } = useAuth();
   const location = useLocation();
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      const redirectPath = location?.state?.from || APP_DEFAULT_PATH;
-      navigate(redirectPath, { replace: true });
-    }
-  }, [isLoggedIn, navigate, location]);
+  if (isLoggedIn && user) {
+    const redirectTo =
+      user.userRole == 'admin'
+        ? '/admin/dashboard'
+        : user.userRole == 'staff'
+          ? '/staff/dashboard'
+          : user.userRole == 'student'
+            ? '/student/dashboard'
+            : '/';
+
+    /* Prevent rendering children if redirecting */
+    return <Navigate to={redirectTo} state={{ from: location.pathname }} replace />;
+  }
 
   return children;
 }

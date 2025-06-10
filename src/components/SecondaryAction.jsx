@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
+import logo from 'assets/images/fcs-logo.jpg';
 
 export default function CardSecondaryAction({ title, link, icon }) {
   const theme = useTheme();
@@ -21,7 +22,8 @@ export default function CardSecondaryAction({ title, link, icon }) {
             alt="MUI Logo"
             sx={{ width: 28, height: 28, bgcolor: 'transparent', border: `2px solid`, borderColor: 'primary.light' }}
           >
-            <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <img src={logo} alt="FCS CRM" width="500" />
+            {/* <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0)">
                 <path d="M100 260.9V131L212.5 195.95V239.25L137.5 195.95V282.55L100 260.9Z" fill={theme.palette.primary.dark} />
                 <path
@@ -39,7 +41,7 @@ export default function CardSecondaryAction({ title, link, icon }) {
                   <rect width="300" height="238.3" fill="white" transform="translate(100 131)" />
                 </clipPath>
               </defs>
-            </svg>
+            </svg> */}
           </Avatar>
         )}
         {icon && (

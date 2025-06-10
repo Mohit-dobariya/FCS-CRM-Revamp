@@ -6,7 +6,6 @@ import DashboardLayout from 'layout/Dashboard';
 import PagesLayout from 'layout/Pages';
 import SimpleLayout from 'layout/Simple';
 import { SimpleLayoutType } from 'config';
-import RoleProtectedRoute from './RoleProtectedRoute';
 // import Faq from 'pages/faq';
 
 const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
@@ -17,11 +16,9 @@ const MaintenanceComingSoon = Loadable(lazy(() => import('pages/maintenance/comi
 const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
 
 // render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
 const Dashboard = Loadable(lazy(() => import('pages/dashboard/index')));
-const AdminDashboard = Loadable(lazy(() => import('pages/admin/index')));
-const StaffDashboard = Loadable(lazy(() => import('pages/staff/index')));
-const StudentDashboard = Loadable(lazy(() => import('pages/student/index')));
+const CRM = Loadable(lazy(() => import('pages/crm-demo/index')));
+const Chat = Loadable(lazy(() => import('pages/chat/')));
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -38,7 +35,16 @@ const MainRoutes = {
         {
           path: '/',
           element: <Dashboard />
+        },
+        {
+          path: 'crm',
+          element: <CRM />
+        },
+        {
+          path: 'chat',
+          element: <Chat />
         }
+
         // {
         //   path: 'faq',
         //   element: <Faq />

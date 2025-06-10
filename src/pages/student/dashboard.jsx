@@ -7,13 +7,13 @@ import useAuth from 'hooks/useAuth';
 
 // ==============================|| SAMPLE PAGE ||============================== //
 
-const AdminDashboard = () => {
+const Dashboard = () => {
   const { user } = useAuth();
   return (
-    <MainCard title={`Dashboard Card - ${user?.name}`}>
-      <Typography variant="body2">Welcome to FCS Admin</Typography>
+    <MainCard title={`Student Dashboard`}>
+      <Typography variant="body2">Welcome to First 4 Counselling - Student</Typography>
     </MainCard>
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;

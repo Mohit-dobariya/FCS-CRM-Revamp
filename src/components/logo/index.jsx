@@ -13,7 +13,7 @@ export default function LogoSection({ reverse, isIcon, sx, to }) {
 
   return (
     <ButtonBase disableRipple {...(isLoggedIn && { component: Link, to: !to ? APP_DEFAULT_PATH : to, sx })}>
-      {isIcon ? <LogoIcon /> : <Logo reverse={reverse} />}
+      {isIcon ? <LogoIcon /> : <Logo size={isLoggedIn ? 40 : 120} />}
     </ButtonBase>
   );
 }

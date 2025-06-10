@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer } from 'react';
+import { createContext, useEffect, useReducer, useState } from 'react';
 
 // third-party
 import { Chance } from 'chance';
@@ -37,20 +37,23 @@ const JWTContext = createContext(null);
 
 export const JWTProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const init = async () => {
       try {
         const serviceToken = window.localStorage.getItem('token');
-        const user = window.localStorage.getItem('users');
-        if (serviceToken) {
+        const storedUser = window.localStorage.getItem('users');
+        if (serviceToken && storedUser) {
+          const parsedUser = JSON.parse(storedUser);
           setSession(serviceToken);
+          setUser(parsedUser);
           dispatch({
             type: LOGIN,
             payload: {
               isLoggedIn: true,
               serviceToken,
-              user
+              user: parsedUser
             }
           });
         } else {
@@ -70,21 +73,18 @@ export const JWTProvider = ({ children }) => {
   }, []);
 
   const login = async (em, password) => {
-    const response = await axios.post('/login', { email: em, password });
-    if (response.data.status) {
-      const user = response.data.data.userDetails;
-      const token = response.data.data.token;
-      const userType = response.data.data.userType;
-      window.localStorage.setItem('token', JSON.stringify(token));
-      window.localStorage.setItem('users', JSON.stringify(user));
-      window.localStorage.setItem('userType', JSON.stringify(userType));
+    const response = await axios.post('/login', { email: em, password, is_new_device: '0' });
 
+    if (response.data.status) {
+      const { token, userDetails } = response.data.data;
+      window.localStorage.setItem('users', JSON.stringify(userDetails));
+      setUser(userDetails);
       setSession(token);
       dispatch({
         type: LOGIN,
         payload: {
           isLoggedIn: true,
-          user
+          user: userDetails
         }
       });
     } else {
@@ -134,7 +134,9 @@ export const JWTProvider = ({ children }) => {
     return <Loader />;
   }
 
-  return <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile }}>{children}</JWTContext.Provider>;
+  return (
+    <JWTContext.Provider value={{ ...state, login, logout, register, resetPassword, updateProfile, user }}>{children}</JWTContext.Provider>
+  );
 };
 
 JWTProvider.propTypes = {

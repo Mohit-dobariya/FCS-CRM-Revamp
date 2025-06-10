@@ -41,21 +41,17 @@ const AuthLogin = ({ isDemo = false }) => {
     <>
       <Formik
         initialValues={{
-          email: '',
-          password: '',
+          email: 'mohit.bloomittech@gmail.com',
+          password: 'mohit@123',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          email: Yup.string().max(255).required('Username / Email address is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             const res = await login(values.email, values.password);
-
-            console.log(res);
-            return;
-
             if (scriptedRef.current) {
               setStatus({ success: true });
               setSubmitting(false);
@@ -79,7 +75,7 @@ const AuthLogin = ({ isDemo = false }) => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">Username / Email Address</InputLabel>
                   <OutlinedInput
                     id="email-login"
                     type="email"
@@ -87,7 +83,7 @@ const AuthLogin = ({ isDemo = false }) => {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder="Enter username / email address"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
                   />

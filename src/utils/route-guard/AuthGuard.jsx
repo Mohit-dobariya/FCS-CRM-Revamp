@@ -1,29 +1,15 @@
-import PropTypes from 'prop-types';
-import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-
-// project import
+import { Navigate } from 'react-router-dom';
 import useAuth from 'hooks/useAuth';
 
-// ==============================|| AUTH GUARD ||============================== //
-
-export default function AuthGuard({ children }) {
-  const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('login', {
-        state: {
-          from: location.pathname
-        },
-        replace: true
-      });
-    }
-  }, [isLoggedIn, navigate, location]);
-
+const AuthGuard = ({ children, role }) => {
+  const { isLoggedIn, user } = useAuth();
+  if (!isLoggedIn || !user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (role && user.userRole !== role) {
+    return <Navigate to="/maintenance/404" replace />;
+  }
   return children;
-}
+};
 
-AuthGuard.propTypes = { children: PropTypes.any };
+export default AuthGuard;

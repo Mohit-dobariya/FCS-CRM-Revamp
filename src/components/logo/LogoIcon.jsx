@@ -1,6 +1,8 @@
 // material-ui
 import { useTheme } from '@mui/material/styles';
 
+import logo from 'assets/images/fcs-logo.jpg';
+
 /**
  * if you want to use image instead of <svg> uncomment following.
  *
@@ -9,8 +11,6 @@ import { useTheme } from '@mui/material/styles';
  * import { ThemeMode } from 'config';
  *
  */
-
-import logo from 'assets/images/fcs-logo.jpg';
 
 // ==============================|| LOGO ICON SVG ||============================== //
 
@@ -24,6 +24,8 @@ export default function LogoIcon() {
      * <img src={theme.palette.mode === ThemeMode.DARK ? logoIconDark : logoIcon} alt="Mantis" width="100" />
      *
      */
-    <img src={logo} alt="logo" width="100%" />
+    <>
+      <img src={logo} alt="FCS CRM" width="40" />
+    </>
   );
 }

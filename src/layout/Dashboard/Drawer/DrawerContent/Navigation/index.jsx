@@ -14,6 +14,7 @@ import menuItem from 'menu-items';
 import useConfig from 'hooks/useConfig';
 import { HORIZONTAL_MAX_ITEM, MenuOrientation } from 'config';
 import { useGetMenuMaster } from 'api/menu';
+import useAuth from 'hooks/useAuth';
 
 // ==============================|| DRAWER CONTENT - NAVIGATION ||============================== //
 
@@ -28,8 +29,16 @@ export default function Navigation() {
   const [selectedLevel, setSelectedLevel] = useState(0);
   const [menuItems, setMenuItems] = useState({ items: [] });
 
+  const { isLoggedIn, user } = useAuth();
+
   useLayoutEffect(() => {
-    setMenuItems(menuItem);
+    if (isLoggedIn && user) {
+      if (user.userRole == 'admin') {
+        setMenuItems(menuItem.adminMenu);
+      } else if (user.userRole == 'staff') {
+        setMenuItems(menuItem.staffMenu);
+      }
+    }
     // eslint-disable-next-line
   }, [menuItem]);
 

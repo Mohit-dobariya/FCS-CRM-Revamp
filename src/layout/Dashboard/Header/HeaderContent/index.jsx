@@ -13,17 +13,28 @@ import useConfig from 'hooks/useConfig';
 import { MenuOrientation } from 'config';
 import DrawerHeader from 'layout/Dashboard/Drawer/DrawerHeader';
 
+import useAuth from 'hooks/useAuth';
+import { Typography } from '@mui/material';
+import _ from 'lodash';
+
 // ==============================|| HEADER - CONTENT ||============================== //
 
 export default function HeaderContent() {
   const { menuOrientation } = useConfig();
+  const { user } = useAuth();
 
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   return (
     <>
       {menuOrientation === MenuOrientation.HORIZONTAL && !downLG && <DrawerHeader open={true} />}
-      {!downLG && <Search />}
+      {user && (
+        <div style={{ flexGrow: 1, width: '100%' }}>
+          <Typography variant="h5" component="h1">
+            {_.startCase(user.userRole?.replace(/_/g, ' '))} Panel
+          </Typography>
+        </div>
+      )}
       {downLG && <Box sx={{ width: '100%', ml: 1 }} />}
 
       <Notification />

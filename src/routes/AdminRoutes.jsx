@@ -1,27 +1,24 @@
 import { lazy } from 'react';
-import RoleProtectedRoute from './RoleProtectedRoute';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
-const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
-const AdminDashboard = Loadable(lazy(() => import('pages/admin/index')));
+import AuthGuard from 'utils/route-guard/AuthGuard';
 
-const AdminRoutes = {
+const AdminDashboard = Loadable(lazy(() => import('pages/admin/dashboard')));
+const OfficeAdminTools = Loadable(lazy(() => import('pages/admin/officeAdminTools')));
+const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
+
+const adminRoutes = {
   path: '/admin',
-  element: <DashboardLayout />,
+  element: (
+    <AuthGuard role="admin">
+      <DashboardLayout />
+    </AuthGuard>
+  ),
   children: [
-    {
-      path: 'dashboard',
-      element: (
-        <RoleProtectedRoute allowedRoles={['admin']}>
-          <AdminDashboard />
-        </RoleProtectedRoute>
-      )
-    },
-    {
-      path: '*',
-      element: <MaintenanceError />
-    }
+    { path: 'dashboard', element: <AdminDashboard /> },
+    { path: 'office_admin_tools', element: <OfficeAdminTools /> },
+    { path: '*', element: <MaintenanceError /> }
   ]
 };
 
-export default AdminRoutes;
+export default adminRoutes;

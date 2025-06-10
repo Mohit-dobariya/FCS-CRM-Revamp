@@ -1,11 +1,12 @@
 // project import
-import Group1 from './group-1';
-import Group2 from './group-2';
+import adminMenu from './adminMenu';
+import staffMenu from './staffMenu';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [Group1, Group2]
+  adminMenu: { items: [adminMenu] },
+  staffMenu: { items: [staffMenu] }
 };
 
 export default menuItems;

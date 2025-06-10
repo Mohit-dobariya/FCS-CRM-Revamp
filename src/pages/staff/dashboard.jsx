@@ -10,8 +10,8 @@ import useAuth from 'hooks/useAuth';
 const Dashboard = () => {
   const { user } = useAuth();
   return (
-    <MainCard title={`Dashboard Card - ${user?.name}`}>
-      <Typography variant="body2">Welcome to FCS Staff</Typography>
+    <MainCard title={`Staff Dashboard`}>
+      <Typography variant="body2">Welcome to First 4 Counselling - Staff</Typography>
     </MainCard>
   );
 };

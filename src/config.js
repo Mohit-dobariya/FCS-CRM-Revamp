@@ -4,7 +4,23 @@ export const twitterColor = '#1DA1F2';
 export const facebookColor = '#3b5998';
 export const linkedInColor = '#0e76a8';
 
-export const APP_DEFAULT_PATH = '/dashboard';
+const storedUser = window.localStorage.getItem('users');
+let url;
+if (storedUser && storedUser.userRole == 'admin') {
+  url = '/admin/dashboard';
+} else if (storedUser && storedUser.userRole == 'staff') {
+  url = '/staff/dashboard';
+} else if (storedUser && storedUser.userRole == 'student') {
+  url = '/student/dashboard';
+} else if (storedUser && storedUser.userRole == 'atw_employee') {
+  url = '/atw_employee/dashboard';
+} else if (storedUser && storedUser.userRole == 'private_client') {
+  url = '/private_client/dashboard';
+} else {
+  url = '/';
+}
+
+export const APP_DEFAULT_PATH = url;
 export const HORIZONTAL_MAX_ITEM = 7;
 export const DRAWER_WIDTH = 260;
 export const MINI_DRAWER_WIDTH = 60;

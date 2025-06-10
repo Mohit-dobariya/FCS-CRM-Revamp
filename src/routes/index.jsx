@@ -1,39 +1,58 @@
-import { createBrowserRouter } from 'react-router-dom';
-import MainRoutes from './MainRoutes';
-import LoginRoutes from './LoginRoutes';
-import AdminRoutes from './AdminRoutes';
-import StaffRoutes from './StaffRoutes';
-import StudentRoutes from './StudentRoutes';
-
-export default function buildRouter(role) {
-  let RoleBasedRoutes;
-  if (role === 'admin') RoleBasedRoutes = AdminRoutes;
-  if (role === 'staff') RoleBasedRoutes = StaffRoutes;
-  if (role === 'student') RoleBasedRoutes = StudentRoutes;
-
-  const routes = [LoginRoutes, RoleBasedRoutes].filter(Boolean);
-
-  return createBrowserRouter(routes, { basename: import.meta.env.VITE_APP_BASE_NAME });
-}
-
 // import { createBrowserRouter } from 'react-router-dom';
 
 // // project import
 // import MainRoutes from './MainRoutes';
 // import LoginRoutes from './LoginRoutes';
-// import AdminRoutes from './AdminRoutes';
-// import StaffRoutes from './StaffRoutes';
-// import StudentRoutes from './StudentRoutes';
 
 // // ==============================|| ROUTING RENDER ||============================== //
-// const role = localStorage.getItem('userType');
-// let RoleBasedRoutes;
-// if (role && role == 'admin') RoleBasedRoutes = AdminRoutes;
-// if (role && role == 'staff') RoleBasedRoutes = StaffRoutes;
-// if (role && role == 'student') RoleBasedRoutes = StudentRoutes;
-// if (!role && role == null) RoleBasedRoutes = LoginRoutes;
-// console.log(role);
 
-// const router = createBrowserRouter([RoleBasedRoutes], { basename: import.meta.env.VITE_APP_BASE_NAME });
+// const router = createBrowserRouter([LoginRoutes, MainRoutes], { basename: import.meta.env.VITE_APP_BASE_NAME });
 
 // export default router;
+
+// src/routes/index.jsx
+
+import { createBrowserRouter } from 'react-router-dom';
+import LoginRoutes from './LoginRoutes';
+import adminRoutes from './adminRoutes';
+import staffRoutes from './StaffRoutes';
+import studentRoutes from './StudentRoutes';
+import { lazy } from 'react';
+import Loadable from 'components/Loadable';
+import PagesLayout from 'layout/Pages';
+import SimpleLayout from 'layout/Simple';
+import { SimpleLayoutType } from 'config';
+
+const MaintenanceError = Loadable(lazy(() => import('pages/maintenance/404')));
+const MaintenanceError500 = Loadable(lazy(() => import('pages/maintenance/500')));
+const MaintenanceUnderConstruction = Loadable(lazy(() => import('pages/maintenance/under-construction')));
+const MaintenanceComingSoon = Loadable(lazy(() => import('pages/maintenance/coming-soon')));
+const AppContactUS = Loadable(lazy(() => import('pages/contact-us')));
+
+const router = createBrowserRouter(
+  [
+    LoginRoutes,
+    adminRoutes,
+    staffRoutes,
+    studentRoutes,
+    {
+      path: '/',
+      element: <SimpleLayout layout={SimpleLayoutType.SIMPLE} />,
+      children: [{ path: 'contact-us', element: <AppContactUS /> }]
+    },
+    {
+      path: '/maintenance',
+      element: <PagesLayout />,
+      children: [
+        { path: '404', element: <MaintenanceError /> },
+        { path: '500', element: <MaintenanceError500 /> },
+        { path: 'under-construction', element: <MaintenanceUnderConstruction /> },
+        { path: 'coming-soon', element: <MaintenanceComingSoon /> }
+      ]
+    },
+    { path: '*', element: <MaintenanceError /> }
+  ],
+  { basename: import.meta.env.VITE_APP_BASE_NAME }
+);
+
+export default router;
